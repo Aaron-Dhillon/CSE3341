@@ -3,8 +3,10 @@ import java.util.*;
 class Scanner {
     BufferedReader bReader;
     FileReader fReader;
+    StringBuilder sBuilder;
     private int nextChar; // translate to char later
     boolean eof = false;
+    private Core currentToken;
     private Map<String, Core> keywords = new HashMap<String, Core>();
     private Map<Character, Core> symbols = new HashMap<Character, Core>();
 
@@ -61,12 +63,48 @@ class Scanner {
 
     // Advance to the next token
     public void nextToken() {
+        consumeWhitespace();
+        if(eof){
+            currentToken = Core.EOS;
+            return;
+        }
 
+        char currentChar = checkNextChar();
+        if(Character.isLetter(currentChar)){
+           String keywordOrId = buildKeywordOrId();
+           if(keywords.containsKey(keywordOrId)){
+               currentToken = keywords.get(keywordOrId);
+                return;
+           } else {
+               currentToken = Core.ID;
+               return;
+           }
+        }else if(Character.isDigit(currentChar)){
+            int constValue = buildConst();
+            if(constValue <0 || constValue > 1000003){
+                currentToken = Core.ERROR;
+                return;
+            }else{
+                currentToken = Core.CONST;
+                return;
+            }
+        }else if ('\'' == currentChar){
+            consumeChar();
+            sBuilder = new StringBuilder();
+            while('\'' != checkNextChar()){
+                sBuilder.append(consumeChar());
+            }
+            consumeChar();
+            currentToken = Core.STRING;
+            return;
+        }else{
+            System.out.println("IDK");
+        }
     }
 
     // Return the current token
     public Core currentToken() {
-        return null;
+        return currentToken;
     }
 
 	// Return the identifier string
@@ -84,7 +122,7 @@ class Scanner {
         return null;
     }
 
-    private void moveChar() {
+    private void moveToNextChar() {
         try {
             nextChar = bReader.read();
             if (nextChar == -1) {
@@ -96,10 +134,39 @@ class Scanner {
         }
     }
 
+    private char checkNextChar(){
+        if(eof){
+            return '\0';
+        }
+        return (char) nextChar;
+    }
+
     private char consumeChar(){
-        char c = (char) nextChar;
-        moveChar();
-        return c;
+        char prev = (char) nextChar;
+        moveToNextChar();
+        return prev;
+    }
+
+    private void consumeWhitespace() {
+        while ( !eof && Character.isWhitespace(checkNextChar())) {
+            moveToNextChar();
+        }
+    }
+
+    private String buildKeywordOrId(){
+        sBuilder = new StringBuilder();
+        while(Character.isLetterOrDigit(checkNextChar())){
+            sBuilder.append(consumeChar());
+        }
+        return sBuilder.toString();
+    }
+
+    private int buildConst(){
+        sBuilder = new StringBuilder();
+        while(Character.isDigit(checkNextChar())){
+            sBuilder.append(consumeChar());
+        }
+        return Integer.parseInt(sBuilder.toString());
     }
 
 
