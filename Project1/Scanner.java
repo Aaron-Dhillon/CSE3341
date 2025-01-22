@@ -4,6 +4,9 @@ class Scanner {
     BufferedReader bReader;
     FileReader fReader;
     StringBuilder sBuilder;
+    private String currentIDString;
+    private String currentString;
+    private int currentConstValue;
     private int nextChar; // translate to char later
     boolean eof = false;
     private Core currentToken;
@@ -77,6 +80,7 @@ class Scanner {
                 return;
            } else {
                currentToken = Core.ID;
+               currentIDString = keywordOrId;
                return;
            }
         }else if(Character.isDigit(currentChar)){
@@ -86,6 +90,7 @@ class Scanner {
                 return;
             }else{
                 currentToken = Core.CONST;
+                currentConstValue = constValue;
                 return;
             }
         }else if ('\'' == currentChar){
@@ -109,17 +114,33 @@ class Scanner {
 
 	// Return the identifier string
     public String getId() {
-        return null;
+        if(currentToken == Core.ID){
+            return sBuilder.toString();
+        }else{
+            System.out.println("Error: Not an ID");
+            return null;
+        }
     }
 
 	// Return the constant value
     public int getConst() {
-        return 0;
+        if(currentToken == Core.CONST){
+            return currentConstValue;
+        }else{
+            System.out.println("Error: Not a CONST");
+            return -1;
+        }    
     }
 	
 	// Return the character string
     public String getString() {
-        return null;
+        if(currentToken == Core.STRING){
+            return currentString;
+        }else{
+            System.out.println("Error: Not a STRING");
+            return null;
+        }
+        
     }
 
     private void moveToNextChar() {
