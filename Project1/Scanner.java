@@ -3,6 +3,8 @@ import java.util.*;
 class Scanner {
     BufferedReader bReader;
     FileReader fReader;
+    private int nextChar; // translate to char later
+    boolean eof = false;
     private Map<String, Core> keywords = new HashMap<String, Core>();
     private Map<Character, Core> symbols = new HashMap<Character, Core>();
 
@@ -81,6 +83,24 @@ class Scanner {
     public String getString() {
         return null;
     }
-    
+
+    private void moveChar() {
+        try {
+            nextChar = bReader.read();
+            if (nextChar == -1) {
+                eof = true;
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file");
+            System.exit(1);
+        }
+    }
+
+    private char consumeChar(){
+        char c = (char) nextChar;
+        moveChar();
+        return c;
+    }
+
 
 }
