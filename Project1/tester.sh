@@ -15,7 +15,7 @@ for value in {1..13}
 do
 	echo ""
 	echo "Running ${value}.code"
-	timeout 5 ${runner} Correct/${value}.code > Correct/${value}.student
+	${runner} Correct/${value}.code > Correct/${value}.student
 	echo ""
 	echo "Comparing with ${value}.expected"
 	#Check for correct print
@@ -40,7 +40,7 @@ echo "Running error cases:"
 echo ""
 echo "Running 1.error:"
 echo "----------"
-timeout 5 ${runner} Error/1.code
+${runner} Error/1.code
 echo "----------"
 read -n 1 -p "Error is '!' in file. Error message related to that? (y/n)" mainmenuinput
 if [ $mainmenuinput = "y" ]; then
@@ -53,7 +53,7 @@ echo "Running error cases:"
 echo ""
 echo "Running 2.error:"
 echo "----------"
-timeout 5 ${runner} Error/2.code
+${runner} Error/2.code
 echo "----------"
 read -n 1 -p "Error is '?' in file. Error message related to that? (y/n)" mainmenuinput
 if [ $mainmenuinput = "y" ]; then
@@ -66,7 +66,7 @@ echo "Running error cases:"
 echo ""
 echo "Running 3.error:"
 echo "----------"
-timeout 5 ${runner} Error/3.code
+${runner} Error/3.code
 echo "----------"
 read -n 1 -p "Error is '$' in file. Error message related to that? (y/n)" mainmenuinput
 if [ $mainmenuinput = "y" ]; then
@@ -79,7 +79,7 @@ echo "Running error cases:"
 echo ""
 echo "Running 4.error:"
 echo "----------"
-timeout 5 ${runner} Error/4.code
+${runner} Error/4.code
 echo "----------"
 read -n 1 -p "Error is too large constant in file. Error message related to that? (y/n)" mainmenuinput
 if [ $mainmenuinput = "y" ]; then

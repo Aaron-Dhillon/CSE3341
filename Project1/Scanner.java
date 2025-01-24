@@ -3,13 +3,13 @@ import java.util.*;
 class Scanner {
     BufferedReader bReader;
     FileReader fReader;
-    StringBuilder sBuilder;
+    StringBuilder sBuilder = new StringBuilder();
     private String currentIDString;
     private String currentString;
     private int currentConstValue;
     private int nextChar; // translate to char later
     boolean eof = false;
-    private Core currentToken;
+    private Core currentToken = null;
     private Map<String, Core> keywords = new HashMap<String, Core>();
     private Map<Character, Core> symbols = new HashMap<Character, Core>();
 
@@ -18,6 +18,7 @@ class Scanner {
         try{
             fReader = new FileReader(filename);
             bReader = new BufferedReader(fReader);
+            moveToNextChar();
         } catch (FileNotFoundException e) {
             System.out.println("File not found");
             System.exit(1);
@@ -77,45 +78,74 @@ class Scanner {
            String keywordOrId = buildKeywordOrId();
            if(keywords.containsKey(keywordOrId)){
                currentToken = keywords.get(keywordOrId);
-                return;
            } else {
                currentToken = Core.ID;
                currentIDString = keywordOrId;
-               return;
            }
-        }else if(Character.isDigit(currentChar)){
+           return;
+        }
+        if(Character.isDigit(currentChar)){
             int constValue = buildConst();
             if(constValue <0 || constValue > 1000003){
                 currentToken = Core.ERROR;
-                return;
+                System.out.println("ERROR: Constant out of range");
             }else{
                 currentToken = Core.CONST;
                 currentConstValue = constValue;
-                return;
             }
-        }else if ('\'' == currentChar){
+            return;
+        }
+        if ('\'' == currentChar){
             consumeChar();
-            sBuilder = new StringBuilder();
-            while('\'' != checkNextChar()){
+            sBuilder.setLength(0);
+            while( !eof && ('\'' != checkNextChar())){
                 sBuilder.append(consumeChar());
             }
-            consumeChar();
-            currentToken = Core.STRING;
+            if (eof) {
+                System.out.println("ERROR: Unterminated string");
+                currentToken = Core.ERROR;
+            }else{
+                consumeChar();
+                currentToken = Core.STRING;
+                currentString = sBuilder.toString();
+            }
             return;
-        }else{
-            System.out.println("IDK");
         }
+        
+        if(currentChar == '='){
+            consumeChar();
+            if(checkNextChar() == '='){
+                currentToken = Core.EQUAL;
+                consumeChar();
+            }else{
+                currentToken = Core.ASSIGN;
+            }
+            return;
+        }
+
+        if(symbols.containsKey(currentChar)){
+            currentToken = symbols.get(currentChar);
+            consumeChar();
+            return;
+        }
+
+        System.out.println("ERROR: Unknown character \'"+ currentChar+"\' in file.");
+        currentToken = Core.ERROR;
+        consumeChar();
     }
 
     // Return the current token
     public Core currentToken() {
+        if (currentToken == null) {
+            nextToken();
+        }
         return currentToken;
     }
 
 	// Return the identifier string
     public String getId() {
         if(currentToken == Core.ID){
-            return sBuilder.toString();
+            return currentIDString;
         }else{
             System.out.println("Error: Not an ID");
             return null;
@@ -175,7 +205,7 @@ class Scanner {
     }
 
     private String buildKeywordOrId(){
-        sBuilder = new StringBuilder();
+        sBuilder.setLength(0);
         while(Character.isLetterOrDigit(checkNextChar())){
             sBuilder.append(consumeChar());
         }
@@ -183,7 +213,7 @@ class Scanner {
     }
 
     private int buildConst(){
-        sBuilder = new StringBuilder();
+        sBuilder.setLength(0);
         while(Character.isDigit(checkNextChar())){
             sBuilder.append(consumeChar());
         }
