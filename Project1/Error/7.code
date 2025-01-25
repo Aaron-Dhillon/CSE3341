@@ -1,0 +1,12 @@
+
+program int X Y  ;
+
+          X := 'Unterminated string //Invalid syntax: input expects commas
+        
+
+
+          output X;
+
+          end
+
+

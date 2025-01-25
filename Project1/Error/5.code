@@ -1,0 +1,10 @@
+
+program int X Y  ;
+
+          X := 1000004; //Constant out of range
+
+
+          output X;
+
+          end
+

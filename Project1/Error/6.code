@@ -1,0 +1,12 @@
+
+program int X Y  ;
+
+          input X Y; //Invalid syntax: input expects commas
+        
+
+
+          output Z; //undefined variable Z
+
+          end
+
+

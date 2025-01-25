@@ -1,0 +1,12 @@
+
+program int X Y  ;
+
+          X := #; //Invalid syntax: input expects commas
+        
+
+
+          output X;
+
+          end
+
+
