@@ -11,7 +11,7 @@ runner="java Main"
 score=0
 error=0
 
-for value in {1..13}
+for value in {1..17}
 do
 	echo ""
 	echo "Running ${value}.code"
