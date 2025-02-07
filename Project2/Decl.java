@@ -1,6 +1,6 @@
 public class Decl {
     String id;
-    boolean isInteger; 
+    boolean isInteger; // Determines if it's an integer or object declaration
 
     void parse() {
         if (Parser.scanner.currentToken() == Core.INTEGER) {
@@ -8,17 +8,22 @@ public class Decl {
         } else if (Parser.scanner.currentToken() == Core.OBJECT) {
             isInteger = false;
         } else {
-            System.out.println("ERROR: Expected 'integer' or 'object' in declaration.");
+            System.out.println("ERROR: Expected 'integer' or 'object' in declaration. Got: " + Parser.scanner.currentToken());
             System.exit(1);
         }
-        Parser.scanner.nextToken();
 
+        Parser.scanner.nextToken(); // Move past 'integer' or 'object'
+        
+        // Expect an identifier (ID)
         Parser.expectedToken(Core.ID);
         id = Parser.scanner.getId();
         Parser.scanner.nextToken();
 
+
+        // Expect a semicolon ';'
         Parser.expectedToken(Core.SEMICOLON);
         Parser.scanner.nextToken();
+
     }
 
     void print() {
