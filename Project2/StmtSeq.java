@@ -8,8 +8,10 @@ public class StmtSeq {
 
         if (Parser.scanner.currentToken() == Core.SEMICOLON) {
             Parser.scanner.nextToken();  // Consume ;
-            ss = new StmtSeq();
-            ss.parse();
+            if (Parser.scanner.currentToken() != Core.END) {  
+                ss = new StmtSeq();
+                ss.parse();
+            }
         }
     }
 
@@ -20,4 +22,5 @@ public class StmtSeq {
         }
     }
 }
+
 
