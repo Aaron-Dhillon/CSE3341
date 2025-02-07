@@ -2,7 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
-class Scanner {
+public class Scanner {
     String id = "[a-zA-Z][a-zA-Z0-9]*";
     String constant = "[0-9]|[1-9][0-9]*";
     BufferedReader in;

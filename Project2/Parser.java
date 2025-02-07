@@ -1,6 +1,5 @@
 
-import java.util.Scanner;
-class Parser {
+public class Parser {
  //scanner is stored here as a static field so it is avaiable to the parse method
     public static Scanner scanner;
     //helper method for handling error messages, used by the parse methods
