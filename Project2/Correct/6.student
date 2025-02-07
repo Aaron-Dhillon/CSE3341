@@ -1,1 +1,1 @@
-ERROR: Unexpected statement.
+ERROR: Expected END, recieved INTEGER

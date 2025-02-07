@@ -1,1 +1,1 @@
-ERROR: Expected ID, recieved INTEGER
+ERROR: Expected 'integer' or 'object' in declaration.
