@@ -54,21 +54,21 @@ public class Assign {
 
     void print() {
         if (isArrayAssign) {
-            System.out.print(id + "['" + stringIndex + "\''] = ");
+            System.out.print(id + "['" + stringIndex + "'] = "); // Fix string formatting
         } else {
-            System.out.print(id + " ");
+            System.out.print(id + " = ");
         }
-
+    
         if (isNewObject) {
-            System.out.print("= new object('" + objectId + "', ");
+            System.out.print("new object('" + objectId + "', ");
             expr.print();
             System.out.print(")");
         } else if (isObjectRef) {
-            System.out.print(": " + objectId);
+            System.out.print(objectId);
         } else {
-            System.out.print("= ");
             expr.print();
         }
         System.out.println(";");
     }
+    
 }

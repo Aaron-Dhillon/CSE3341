@@ -43,7 +43,7 @@ class Factor {
 
     void print() {
         if (isArrayAccess) {
-            System.out.print(id + "[" + "\"" + stringIndex + "\"" + "]");
+            System.out.print(id + "['" + stringIndex + "']"); // Ensure single quotes
         } else if (id != null) {
             System.out.print(id);
         } else if (isConst) {
@@ -54,4 +54,5 @@ class Factor {
             System.out.print(")");
         }
     }
+    
 }
