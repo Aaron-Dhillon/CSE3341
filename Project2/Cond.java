@@ -23,7 +23,7 @@ class Cond {
         }
 
         if (Parser.scanner.currentToken() == Core.OR || Parser.scanner.currentToken() == Core.AND) {
-            operator = Parser.scanner.currentToken().toString();
+            operator = Parser.scanner.currentToken().toString().toLowerCase();
             Parser.scanner.nextToken();
             rightCond = new Cond();
             rightCond.parse();
