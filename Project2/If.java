@@ -5,18 +5,26 @@ class If {
     boolean hasElse = false;
 
     void parse() {
+        // Expect 'if'
         Parser.expectedToken(Core.IF);
         Parser.scanner.nextToken();
 
+        // Parse the condition
         condition = new Cond();
         condition.parse();
 
-        Parser.expectedToken(Core.THEN);
+        // Expect 'then'
+        if (Parser.scanner.currentToken() != Core.THEN) {
+            System.out.println("ERROR: Missing 'then' after if condition.");
+            System.exit(1);
+        }
         Parser.scanner.nextToken();
 
+        // Parse 'then' block
         thenStmtSeq = new StmtSeq();
         thenStmtSeq.parse();
 
+        // Check if 'else' exists
         if (Parser.scanner.currentToken() == Core.ELSE) {
             hasElse = true;
             Parser.scanner.nextToken();
@@ -24,7 +32,11 @@ class If {
             elseStmtSeq.parse();
         }
 
-        Parser.expectedToken(Core.END);
+        // Expect 'end'
+        if (Parser.scanner.currentToken() != Core.END) {
+            System.out.println("ERROR: Missing 'end' for if statement.");
+            System.exit(1);
+        }
         Parser.scanner.nextToken();
     }
 
