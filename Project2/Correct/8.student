@@ -8,5 +8,5 @@ object c;
 begin 
 read (x);
 print (x);
-a = new object("default", 3);
+a = new object('default', 3);
 end

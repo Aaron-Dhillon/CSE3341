@@ -54,13 +54,13 @@ public class Assign {
 
     void print() {
         if (isArrayAssign) {
-            System.out.print(id + "[\"" + stringIndex + "\"] = ");
+            System.out.print(id + "['" + stringIndex + "\''] = ");
         } else {
             System.out.print(id + " ");
         }
 
         if (isNewObject) {
-            System.out.print("= new object(\"" + objectId + "\", ");
+            System.out.print("= new object('" + objectId + "', ");
             expr.print();
             System.out.print(")");
         } else if (isObjectRef) {
