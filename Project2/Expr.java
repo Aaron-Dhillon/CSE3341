@@ -8,8 +8,14 @@ class Expr {
         term.parse();
 
         if (Parser.scanner.currentToken() == Core.ADD || Parser.scanner.currentToken() == Core.SUBTRACT) {
-            operator = Parser.scanner.currentToken().toString();
-            Parser.scanner.nextToken();
+            // Store actual operator symbol instead of enum name
+            if (Parser.scanner.currentToken() == Core.ADD) {
+                operator = "+"; 
+            } else if (Parser.scanner.currentToken() == Core.SUBTRACT) {
+                operator = "-";
+            }
+
+            Parser.scanner.nextToken(); // Move past the operator
             expr = new Expr();
             expr.parse();
         }
