@@ -8,7 +8,11 @@ public class Cmpr {
         left.parse();
 
         if (Parser.scanner.currentToken() == Core.EQUAL || Parser.scanner.currentToken() == Core.LESS) {
-            comparisonOperator = Parser.scanner.currentToken().toString();
+            if (Parser.scanner.currentToken() == Core.EQUAL) {
+                comparisonOperator = "==";
+            } else {
+                comparisonOperator = "<";
+            }
             Parser.scanner.nextToken();
         } else {
             System.out.println("ERROR: Invalid comparison operator in condition.");

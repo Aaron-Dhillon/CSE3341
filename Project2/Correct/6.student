@@ -1,1 +1,9 @@
-ERROR: Expected END, recieved SEMICOLON
+procedure test6 is
+begin 
+integer x;
+integer y;
+for (x = 0; x < 10; x + 1) do
+y = x;
+end
+print (y);
+end

@@ -7,6 +7,10 @@ class Print {
 
         expr = new Expr();
         expr.parse();
+
+        // Consume the semicolon after the print statement
+        Parser.expectedToken(Core.SEMICOLON);
+        Parser.scanner.nextToken();  // MOVE PAST SEMICOLON
     }
 
     void print() {

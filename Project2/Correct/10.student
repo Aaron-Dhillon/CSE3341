@@ -1,1 +1,8 @@
-ERROR: Expected END, recieved SEMICOLON
+procedure test10 is
+integer x;
+object a;
+begin 
+x = 1 - 1 - 1 - 1;
+print (x);
+a["x"] = = a["y"];
+end
