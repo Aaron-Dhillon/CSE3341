@@ -6,12 +6,21 @@ public class StmtSeq {
         s = new Stmt();
         s.parse();
 
-        if (Parser.scanner.currentToken() == Core.SEMICOLON) {
-            Parser.scanner.nextToken();  // Consume ;
-            if (Parser.scanner.currentToken() != Core.END) {  
+        // Check if the next token starts a valid statement
+        switch (Parser.scanner.currentToken()) {
+            case ID:       // Assignment statement
+            case PRINT:    // Print statement
+            case IF:       // If statement
+            case FOR:      // Loop statement
+            case READ:     // Read statement
+            case INTEGER:  // Declaration statement
+            case OBJECT:   // Declaration statement
                 ss = new StmtSeq();
                 ss.parse();
-            }
+                break;
+            default:
+                // Stop parsing StmtSeq if the next token does not start a new statement
+                break;
         }
     }
 
@@ -22,5 +31,3 @@ public class StmtSeq {
         }
     }
 }
-
-

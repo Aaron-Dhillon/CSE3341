@@ -8,7 +8,11 @@ class Term {
         factor.parse();
 
         if (Parser.scanner.currentToken() == Core.MULTIPLY || Parser.scanner.currentToken() == Core.DIVIDE) {
-            operator = Parser.scanner.currentToken().toString();
+            if(Parser.scanner.currentToken() == Core.MULTIPLY) {
+                operator = "*";
+            } else {
+                operator = "/";
+            }
             Parser.scanner.nextToken();
             term = new Term();
             term.parse();
