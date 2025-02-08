@@ -66,4 +66,12 @@ public class Parser {
         }
         return variableTypes.getOrDefault(varName, false); // Default to false (integer) if unknown
     }
+
+    // **Fix: Ensure no extra tokens exist after 'END'**
+    public static void checkForExtraTokens() {
+        if (scanner.currentToken() != Core.EOS) {
+            System.out.println("ERROR: Extra tokens after end.");
+            System.exit(1);
+        }
+    }
 }

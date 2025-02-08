@@ -26,4 +26,8 @@ class Term {
             term.print();
         }
     }
+
+    String getFirstVariable() {
+        return factor.getFirstVariable();
+    }
 }

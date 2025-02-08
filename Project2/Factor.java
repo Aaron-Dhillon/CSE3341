@@ -54,5 +54,8 @@ class Factor {
             System.out.print(")");
         }
     }
+    String getFirstVariable() {
+        return id;
+    }
     
 }

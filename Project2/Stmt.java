@@ -7,44 +7,38 @@ public class Stmt {
     Decl declStmt;
 
     void parse() {
+
         switch (Parser.scanner.currentToken()) {
             case ID:
-                // Assignment statement
                 assign = new Assign();
                 assign.parse();
                 break;
             case PRINT:
-                // Print statement
                 printStmt = new Print();
                 printStmt.parse();
                 break;
             case IF:
-                // If statement
                 ifStmt = new If();
                 ifStmt.parse();
                 break;
             case FOR:
-                // Loop statement
                 loopStmt = new Loop();
                 loopStmt.parse();
                 break;
             case READ:
-                // Read statement
                 readStmt = new Read();
                 readStmt.parse();
                 break;
             case INTEGER:
             case OBJECT:
-                // Declaration statement
                 declStmt = new Decl();
                 declStmt.parse();
                 break;
             default:
-                // Error: unexpected token
-                System.out.println("ERROR: Unexpected statement.");
+                System.out.println("ERROR: Unexpected statement. Found token: " + Parser.scanner.currentToken());
                 System.exit(1);
         }
-    }
+    }    
 
     void print() {
         if (assign != null) assign.print();

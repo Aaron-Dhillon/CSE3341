@@ -8,19 +8,18 @@ public class StmtSeq {
 
         // Check if the next token starts a valid statement
         switch (Parser.scanner.currentToken()) {
-            case ID:       // Assignment statement
-            case PRINT:    // Print statement
-            case IF:       // If statement
-            case FOR:      // Loop statement
-            case READ:     // Read statement
-            case INTEGER:  // Declaration statement
-            case OBJECT:   // Declaration statement
+            case ID:
+            case PRINT:
+            case IF:
+            case FOR:
+            case READ:
+            case INTEGER:
+            case OBJECT:
                 ss = new StmtSeq();
                 ss.parse();
                 break;
             default:
-                // Stop parsing StmtSeq if the next token does not start a new statement
-                break;
+                 break;
         }
     }
 

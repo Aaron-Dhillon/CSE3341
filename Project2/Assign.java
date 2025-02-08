@@ -2,7 +2,7 @@ public class Assign {
     String id, objectId, stringIndex;
     Expr expr;
     boolean isArrayAssign = false, isNewObject = false, isObjectRef = false;
-    boolean isPropertyAssign = false; // NEW: Tracks object property assignments
+    boolean isPropertyAssign = false; // Tracks object property assignments
 
     void parse() {
         // Expect an identifier
@@ -81,6 +81,13 @@ public class Assign {
             } else {
                 expr = new Expr();
                 expr.parse();
+
+                // Ensure all variables in the expression are declared
+                String undeclaredVar = expr.getFirstVariable();
+                if (undeclaredVar != null && !Parser.isVariableDeclared(undeclaredVar)) {
+                    System.out.println("ERROR: Variable '" + undeclaredVar + "' used before declaration.");
+                    System.exit(1);
+                }
 
                 // Prevent assigning integer expressions to object variables
                 if (Parser.isObject(id) && !isPropertyAssign) {
