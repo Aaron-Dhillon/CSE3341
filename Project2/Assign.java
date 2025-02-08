@@ -2,16 +2,23 @@ public class Assign {
     String id, objectId, stringIndex;
     Expr expr;
     boolean isArrayAssign = false, isNewObject = false, isObjectRef = false;
+    boolean isPropertyAssign = false; // NEW: Tracks object property assignments
 
     void parse() {
         // Expect an identifier
         Parser.expectedToken(Core.ID);
         id = Parser.scanner.getId();
+
+        // Check if variable is declared in any valid scope
+        if (!Parser.isVariableDeclared(id)) {
+            System.out.println("ERROR: Variable '" + id + "' used before declaration.");
+            System.exit(1);
+        }
+
         Parser.scanner.nextToken();
 
-        // Handle array assignment id['string']
+        // Handle array/object property assignment id['string']
         if (Parser.scanner.currentToken() == Core.LSQUARE) {
-            isArrayAssign = true;
             Parser.scanner.nextToken();
 
             if (Parser.scanner.currentToken() != Core.STRING) {
@@ -21,9 +28,15 @@ public class Assign {
 
             stringIndex = Parser.scanner.getString();
             Parser.scanner.nextToken();
-
             Parser.expectedToken(Core.RSQUARE);
             Parser.scanner.nextToken();
+
+            // Determine if this is an object property or array access
+            if (Parser.isObject(id)) {
+                isPropertyAssign = true;  // Object property assignment (a['x'])
+            } else {
+                isArrayAssign = true;  // Regular array indexing (integer arrays)
+            }
         }
 
         // Ensure correct assignment operator '=' (not '==')
@@ -59,15 +72,34 @@ public class Assign {
 
                 Parser.expectedToken(Core.RPAREN);
                 Parser.scanner.nextToken();
+
+                // Ensure assignment target is an object
+                if (!Parser.isObject(id) && !isPropertyAssign) {
+                    System.out.println("ERROR: Cannot assign an object to an integer variable '" + id + "'.");
+                    System.exit(1);
+                }
             } else {
                 expr = new Expr();
                 expr.parse();
+
+                // Prevent assigning integer expressions to object variables
+                if (Parser.isObject(id) && !isPropertyAssign) {
+                    System.out.println("ERROR: Cannot assign an integer expression to an object variable '" + id + "'.");
+                    System.exit(1);
+                }
             }
         } else if (Parser.scanner.currentToken() == Core.COLON) {
             isObjectRef = true;
             Parser.scanner.nextToken();
             Parser.expectedToken(Core.ID);
             objectId = Parser.scanner.getId();
+
+            // Ensure the referenced object exists in any valid scope
+            if (!Parser.isVariableDeclared(objectId)) {
+                System.out.println("ERROR: Object '" + objectId + "' used before declaration.");
+                System.exit(1);
+            }
+
             Parser.scanner.nextToken();
         } else {
             System.out.println("ERROR: Expected '=' or ':' after identifier '" + id + "'.");
@@ -75,15 +107,14 @@ public class Assign {
         }
 
         // Ensure semicolon at the end of the assignment
-        if (Parser.scanner.currentToken() != Core.SEMICOLON) {
-            System.out.println("ERROR: Missing semicolon ';' at the end of assignment.");
-            System.exit(1);
-        }
+        Parser.expectedToken(Core.SEMICOLON);
         Parser.scanner.nextToken();
     }
 
     void print() {
         if (isArrayAssign) {
+            System.out.print(id + "['" + stringIndex + "'] = ");
+        } else if (isPropertyAssign) {
             System.out.print(id + "['" + stringIndex + "'] = ");
         } else {
             System.out.print(id + " = ");

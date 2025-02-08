@@ -1,12 +1,70 @@
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Stack;
+
 public class Parser {
- //scanner is stored here as a static field so it is avaiable to the parse method
     public static Scanner scanner;
-    //helper method for handling error messages, used by the parse methods
+
+    // Stack-based symbol table to track declared variables per scope
+    public static Stack<HashSet<String>> scopeStack = new Stack<>();
+
+    // Map to track variable types (true = object, false = integer)
+    private static HashMap<String, Boolean> variableTypes = new HashMap<>();
+
     static void expectedToken(Core expected) {
         if (scanner.currentToken() != expected) {
-            System.out.println("ERROR: Expected " + expected + ", recieved " + scanner.currentToken());
-            System.exit(0);
+            System.out.println("ERROR: Expected " + expected + ", received " + scanner.currentToken());
+            System.exit(1);
         }
+    }
+
+    // Push a new scope onto the stack
+    public static void enterScope() {
+        scopeStack.push(new HashSet<>());
+    }
+
+    // Pop the current scope from the stack
+    public static void exitScope() {
+        if (!scopeStack.isEmpty()) {
+            for (String var : scopeStack.peek()) {
+                variableTypes.remove(var); // Remove variables when exiting scope
+            }
+            scopeStack.pop();
+        }
+    }
+
+    // Declare a variable in the current scope and track its type
+    public static void declareVariable(String varName, boolean isObject) {
+        if (scopeStack.isEmpty()) {
+            // If no scope exists, create a global scope
+            scopeStack.push(new HashSet<>());
+        }
+        HashSet<String> currentScope = scopeStack.peek();
+        if (currentScope.contains(varName)) {
+            System.out.println("ERROR: Variable '" + varName + "' is already declared in this scope.");
+            System.exit(1);
+        }
+        currentScope.add(varName);
+        variableTypes.put(varName, isObject);
+    }
+
+    // Check if a variable is declared in any scope
+    public static boolean isVariableDeclared(String varName) {
+        for (int i = scopeStack.size() - 1; i >= 0; i--) {
+            if (scopeStack.get(i).contains(varName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Check if a variable is an object
+    public static boolean isObject(String varName) {
+        if (!isVariableDeclared(varName)) {
+            System.out.println("ERROR: Variable '" + varName + "' used before declaration.");
+            System.exit(1);
+        }
+        return variableTypes.getOrDefault(varName, false); // Default to false (integer) if unknown
     }
 }
