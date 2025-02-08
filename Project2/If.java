@@ -20,16 +20,22 @@ class If {
         }
         Parser.scanner.nextToken();
 
-        // Parse 'then' block
+        // Enter a new scope for the THEN block
+        Parser.enterScope();
         thenStmtSeq = new StmtSeq();
         thenStmtSeq.parse();
+        Parser.exitScope(); // Exit scope after parsing THEN block
 
         // Check if 'else' exists
         if (Parser.scanner.currentToken() == Core.ELSE) {
             hasElse = true;
             Parser.scanner.nextToken();
+
+            // Enter a new scope for the ELSE block
+            Parser.enterScope();
             elseStmtSeq = new StmtSeq();
             elseStmtSeq.parse();
+            Parser.exitScope(); // Exit scope after parsing ELSE block
         }
 
         // Expect 'end'

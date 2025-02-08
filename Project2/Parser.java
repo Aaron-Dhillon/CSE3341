@@ -1,4 +1,3 @@
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Stack;
@@ -24,13 +23,13 @@ public class Parser {
         scopeStack.push(new HashSet<>());
     }
 
-    // Pop the current scope from the stack
+    // Pop the current scope from the stack and remove its variables
     public static void exitScope() {
         if (!scopeStack.isEmpty()) {
-            for (String var : scopeStack.peek()) {
-                variableTypes.remove(var); // Remove variables when exiting scope
+            HashSet<String> removedScope = scopeStack.pop();
+            for (String var : removedScope) {
+                variableTypes.remove(var); // Ensure variables are removed from tracking
             }
-            scopeStack.pop();
         }
     }
 
@@ -49,7 +48,7 @@ public class Parser {
         variableTypes.put(varName, isObject);
     }
 
-    // Check if a variable is declared in any scope
+    // Check if a variable is declared in the **current** or **parent scopes**
     public static boolean isVariableDeclared(String varName) {
         for (int i = scopeStack.size() - 1; i >= 0; i--) {
             if (scopeStack.get(i).contains(varName)) {

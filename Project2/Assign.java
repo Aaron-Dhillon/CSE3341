@@ -87,6 +87,12 @@ public class Assign {
                     System.out.println("ERROR: Cannot assign an integer expression to an object variable '" + id + "'.");
                     System.exit(1);
                 }
+
+                // Prevent assigning a property to an integer variable
+                if (!Parser.isObject(id) && isPropertyAssign) {
+                    System.out.println("ERROR: Cannot assign an object property '" + id + "['" + stringIndex + "']' to an integer variable.");
+                    System.exit(1);
+                }
             }
         } else if (Parser.scanner.currentToken() == Core.COLON) {
             isObjectRef = true;
