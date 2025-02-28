@@ -22,4 +22,9 @@ class Read implements Stmt {
 		argument.print();
 		System.out.println(");");
 	}
+
+	public void execute(Memory memory, Scanner inputScanner) {
+		int value = inputScanner.getConst();
+		memory.setVariable(argument.identifier, value);
+	}
 }

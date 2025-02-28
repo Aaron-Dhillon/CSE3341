@@ -85,4 +85,17 @@ class Assign implements Stmt {
 		}
 		System.out.println(";");
 	}
+
+	public void execute(Memory memory){
+		if (type == 0) {
+			memory.setIntVariable(assignTo.identifier, expr.execute(memory));
+		} else if (type == 1) {
+			memory.setObjectKey(assignTo.identifier, key, expr.execute(memory));
+		} else if (type == 2) {
+			memory.declareVariable(assignTo.identifier,false);
+			memory.setObjectKey(assignTo.identifier, key, expr.execute(memory));
+		} else if (type == 3) {
+			memory.aliasObject(assignTo.identifier, assignFrom.identifier);
+		}
+	}
 }

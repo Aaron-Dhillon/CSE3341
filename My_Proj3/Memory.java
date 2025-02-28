@@ -1,58 +1,79 @@
 import java.util.*;
 
 class Memory {
-    private Map<String, Integer> globalMemory;
-    private Stack<Map<String, Integer>> localMemory;
+    private Map<String, Variable> globalMemory;
+    private Stack<Map<String, Variable>> localMemoryStack;
 
     public Memory() {
         globalMemory = new HashMap<>();
-        localMemory = new Stack<>();
+        localMemoryStack = new Stack<>();
     }
 
     // Enter a new local scope
-    public void newScope() {
-        localMemory.push(new HashMap<>());
+    public void enterScope() {
+        localMemoryStack.push(new HashMap<>());
     }
 
     // Exit the current local scope
-    public void exitCurrentScope() {
-        if (!localMemory.isEmpty()) {
-            localMemory.pop();
+    public void exitScope() {
+        if (!localMemoryStack.isEmpty()) {
+            localMemoryStack.pop();
         } else {
-            System.out.println("ERROR: No local scope to exit");
+            System.out.println("ERROR: Attempted to exit global scope.");
             System.exit(1);
         }
     }
 
-    public void setVariable(String varName, int value) {
-        if (!localMemory.isEmpty() && localMemory.peek().containsKey(varName)) {
-            localMemory.peek().put(varName, value);
-        } else if (globalMemory.containsKey(varName)) {
-            globalMemory.put(varName, value);
-        } else {
-            System.out.println("ERROR: Undeclared variable '" + varName + "'");
-            System.exit(1);
-        }
+    // Declare a variable (can be integer or object)
+    public void declareVariable(String varName, boolean isInteger) {
+        getCurrentScope().put(varName, new Variable(isInteger));
     }
 
-    public int getVariable(String varName) {
-        if (!localMemory.isEmpty() && localMemory.peek().containsKey(varName)) {
-            return localMemory.peek().get(varName);
+    // Assign an integer value to a variable
+    public void setIntVariable(String varName, int value) {
+        getVariable(varName).setIntValue(value);
+    }
+
+    // Retrieve an integer value
+    public int getIntVariableValue(String varName) {
+        return getVariable(varName).getIntValue();
+    }
+
+    // Create a new object with a default key-value pair
+    public void createObject(String varName, String key, int value) {
+        getVariable(varName).initializeAsObject(key, value);
+    }
+
+    // Set an object key-value pair
+    public void setObjectKey(String varName, String key, int value) {
+        getVariable(varName).setObjectKey(key, value);
+    }
+
+    // Get an object's key-value pair
+    public int getObjectKey(String varName, String key) {
+        return getVariable(varName).getObjectKey(key);
+    }
+
+    // Aliasing: Make var1 reference the same object as var2
+    public void aliasObject(String var1, String var2) {
+        getVariable(var1).aliasTo(getVariable(var2));
+    }
+
+    // Helper: Retrieve a variable from the correct scope
+    private Variable getVariable(String varName) {
+        if (!localMemoryStack.isEmpty() && localMemoryStack.peek().containsKey(varName)) {
+            return localMemoryStack.peek().get(varName);
         } else if (globalMemory.containsKey(varName)) {
             return globalMemory.get(varName);
         } else {
             System.out.println("ERROR: Undeclared variable '" + varName + "'");
             System.exit(1);
-            return 0;
+            return null;  // Unreachable, but required by Java
         }
     }
 
-    // Declare a new variable (local if inside a scope, global otherwise)
-    public void declareVariable(String varName) {
-        if (!localMemory.isEmpty()) {
-            localMemory.peek().put(varName, 0);  // Local variable with default value 0
-        } else {
-            globalMemory.put(varName, 0);  // Global variable
-        }
+    // Helper: Get the current scope (local or global)
+    private Map<String, Variable> getCurrentScope() {
+        return localMemoryStack.isEmpty() ? globalMemory : localMemoryStack.peek();
     }
 }
