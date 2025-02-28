@@ -18,4 +18,9 @@ class DeclInteger {
 		id.print();
 		System.out.println(";");
 	}
+
+	public void execute(Memory memory) {
+		memory.declareVariable(id.identifier,true);
+		memory.setIntVariable(id.identifier,0);
+	}
 }

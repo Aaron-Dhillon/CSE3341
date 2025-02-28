@@ -32,4 +32,11 @@ class StmtSeq {
 			ss.print(indent);
 		}
 	}
+
+	public void execute(Memory memory) {
+		stmt.execute(memory);
+		if (ss != null) {
+			ss.execute(memory);
+		}
+	}
 }
