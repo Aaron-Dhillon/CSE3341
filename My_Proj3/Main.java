@@ -1,4 +1,3 @@
-import java.io.*;
 
 class Main {
     public static void main(String[] args) {
@@ -15,8 +14,8 @@ class Main {
         // Parse the input program
         Procedure procedure = new Procedure();
         procedure.parse();
-
+        Memory memory = new Memory();
         // Execute the parsed program
-        procedure.execute();
+        procedure.execute(memory);
     }
 }

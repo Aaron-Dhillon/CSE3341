@@ -1,4 +1,3 @@
-import java.util.*;
 
 class If implements Stmt {
 	Cond cond;
@@ -49,5 +48,5 @@ class If implements Stmt {
 			ss2.execute(memory);
 		}
 	}
-		
+
 }
