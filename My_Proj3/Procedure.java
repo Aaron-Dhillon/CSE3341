@@ -36,6 +36,8 @@ class Procedure {
 		if (ds != null) {
 			ds.execute(memory);
 		}
+		memory.enterScope();
 		ss.execute(memory);
+		memory.exitScope();
 	}
 }

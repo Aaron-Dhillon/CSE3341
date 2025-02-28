@@ -43,9 +43,13 @@ class If implements Stmt {
 	}
 	public void execute(Memory memory) {
 		if(cond.execute(memory)) {
+			memory.enterScope();
 			ss1.execute(memory);
+			memory.exitScope();
 		} else if(ss2 != null) {
+			memory.enterScope();
 			ss2.execute(memory);
+			memory.exitScope();
 		}
 	}
 
