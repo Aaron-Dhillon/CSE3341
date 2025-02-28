@@ -38,6 +38,5 @@ class Procedure {
 		}
 	
 		ss.execute(memory); // Execute statements
-	
 	}
 }

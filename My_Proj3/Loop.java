@@ -56,20 +56,22 @@ class Loop implements Stmt {
 	}
 
 	public void execute(Memory memory) {
-		int loopVal = initial.execute(memory);
-		memory.declareVariable(id.identifier, true);
+		int loopVal = initial.execute(memory);	
 		memory.setIntVariable(id.identifier, loopVal);
 	
-		memory.enterScope(); // Enter loop scope ONCE
+		memory.enterScope(); // Enter loop scope
 	
 		while (cond.execute(memory)) {
-			ss.execute(memory); // Execute loop body
+			ss.execute(memory);
 			int newVal = update.execute(memory);
 			memory.setIntVariable(id.identifier, newVal);
 		}
 	
-		memory.exitScope(); // Exit loop scope AFTER completing all iterations
+		int finalValue = memory.getIntVariableValue(id.identifier); // Get final x value
+		memory.exitScope(); // Exit loop scope
+		memory.setIntVariable(id.identifier, finalValue); // Restore x in global scope
 	}
+	
 	
 	
 }
