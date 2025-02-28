@@ -4,6 +4,7 @@ class Variable {
     private boolean isInteger;
     private Integer intValue;
     Map<String, Integer> objectValue;
+    String defaultKey;
 
     // Constructor for integer variables (default value 0)
     public Variable(boolean isInteger) {
@@ -56,6 +57,7 @@ class Variable {
             System.exit(1);
         }
         this.objectValue = new HashMap<>();
+        this.defaultKey = key;
         setObjectKey(key, initialValue);
     }
 
