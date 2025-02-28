@@ -32,10 +32,12 @@ class Procedure {
 		System.out.println("end");
 	}
 
-	void execute(Memory memory) {
+	public void execute(Memory memory) {
 		if (ds != null) {
-			ds.execute(memory);
+			ds.execute(memory); // Execute declarations
 		}
-		ss.execute(memory);
+	
+		ss.execute(memory); // Execute statements
+	
 	}
 }
