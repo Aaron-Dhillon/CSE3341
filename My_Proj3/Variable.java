@@ -3,7 +3,7 @@ import java.util.*;
 class Variable {
     private boolean isInteger;
     private Integer intValue;
-    private Map<String, Integer> objectValue;
+    Map<String, Integer> objectValue;
 
     // Constructor for integer variables (default value 0)
     public Variable(boolean isInteger) {
@@ -76,5 +76,10 @@ class Variable {
     // Aliasing: Make this variable reference another object's map
     public void aliasTo(Variable other) {
         this.objectValue = other.objectValue; // Now both variables reference the same object
+    }
+
+    // Print the map
+    public void print() {
+        objectValue.forEach((key, value) -> System.out.println(key + " : " + value));
     }
 }

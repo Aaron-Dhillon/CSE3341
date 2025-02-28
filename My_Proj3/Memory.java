@@ -54,7 +54,11 @@ class Memory {
 
     // Set an object key-value pair
     public void setObjectKey(String varName, String key, int value) {
-        getVariable(varName).setObjectKey(key, value);
+        if(getVariable(varName).objectValue == null){
+            getVariable(varName).initializeAsObject(key, value);
+        }else{
+            getVariable(varName).setObjectKey(key, value);
+        }
     }
 
     // Get an object's key-value pair
