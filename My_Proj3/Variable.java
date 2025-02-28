@@ -23,15 +23,10 @@ class Variable {
         return isInteger;
     }
 
-    // Check if this variable holds an object
-    public boolean isObject() {
-        return !isInteger;
-    }
-
     // Get integer value
     public int getIntValue() {
         if (!isInteger) {
-            objectValue.get(getDefaultKey());
+            return objectValue.get(getDefaultKey());
         }
         return intValue;
     }
@@ -39,7 +34,7 @@ class Variable {
     // Set integer value
     public void setIntValue(int value) {
         if (!isInteger) {
-            objectValue.put(getDefaultKey(), intValue);
+            objectValue.put(getDefaultKey(), value);
         }
         this.intValue = value;
     }
@@ -75,7 +70,8 @@ class Variable {
 
     // Aliasing: Make this variable reference another object's map
     public void aliasTo(Variable other) {
-        this.objectValue = other.objectValue; // Now both variables reference the same object
+        this.objectValue = other.objectValue;
+        this.defaultKey = other.getDefaultKey();// Now both variables reference the same object   
     }
     public String getDefaultKey() {
         return defaultKey;
