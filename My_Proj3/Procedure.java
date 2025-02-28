@@ -32,4 +32,8 @@ class Procedure {
 		ss.print(1);
 		System.out.println("end");
 	}
+
+	void execute() {
+		/// Execute the statements
+	}
 }

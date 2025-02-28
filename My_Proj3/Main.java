@@ -1,13 +1,22 @@
+import java.io.*;
+
 class Main {
-	public static void main(String[] args) {
-		// Initialize the scanner with the input file
-		Scanner S = new Scanner(args[0]);
-		Parser.scanner = S;
-		
-		Procedure p = new Procedure();
-		
-		p.parse();
-				
-		p.print();
-	}
+    public static void main(String[] args) {
+        // Ensure correct number of arguments
+        if (args.length != 2) {
+            System.out.println("ERROR: Usage - java Main <code file> <data file>");
+            return;
+        }
+
+        // Initialize the scanner with the code file
+        Scanner scanner = new Scanner(args[0]);
+        Parser.scanner = scanner;
+
+        // Parse the input program
+        Procedure procedure = new Procedure();
+        procedure.parse();
+
+        // Execute the parsed program
+        procedure.execute();
+    }
 }
