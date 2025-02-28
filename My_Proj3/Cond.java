@@ -51,4 +51,24 @@ class Cond {
 			}
 		}
 	}
+
+	public boolean execute(Memory memory) {
+		if (option == 0) {
+			return cmpr.execute(memory);
+		} else if (option == 1) {
+			return !cond.execute(memory);
+		} else if(option == 2) {
+			return cond.execute(memory);
+		} else if (option == 3) {
+			return cmpr.execute(memory) || cond.execute(memory);
+		} else if (option == 4) {
+			return cmpr.execute(memory) && cond.execute(memory);
+		}else{
+			System.out.println("ERROR: Invalid option in Cond");
+			return false; // Should never reach this point
+		}
+		
+	}
+
+
 }

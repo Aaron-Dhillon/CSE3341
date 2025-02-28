@@ -42,4 +42,12 @@ class If implements Stmt {
 		}
 		System.out.println("end");
 	}
+	public void execute(Memory memory) {
+		if(cond.execute(memory)) {
+			ss1.execute(memory);
+		} else if(ss2 != null) {
+			ss2.execute(memory);
+		}
+	}
+		
 }

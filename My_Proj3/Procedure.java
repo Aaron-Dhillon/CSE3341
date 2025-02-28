@@ -33,7 +33,10 @@ class Procedure {
 		System.out.println("end");
 	}
 
-	void execute() {
-		/// Execute the statements
+	void execute(Memory memory) {
+		if (ds != null) {
+			ds.execute(memory);
+		}
+		ss.execute(memory);
 	}
 }

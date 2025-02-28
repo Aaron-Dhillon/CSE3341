@@ -31,4 +31,16 @@ class Cmpr {
 		}
 		expr2.print();
 	}
+
+	public boolean execute(Memory memory) {
+		int val1 = expr1.execute(memory);
+		int val2 = expr2.execute(memory);
+		switch(option) {
+			case 0:
+				return val1 == val2;
+			case 1:
+				return val1 < val2;
+		}
+		return false; // Should never reach this point
+	}
 }
