@@ -28,4 +28,16 @@ class Expr {
 			expr.print();
 		}
 	}
+
+	public int execute(Memory memory) {
+		int value = term.execute(memory);
+		if (option == 1) {
+			expr.execute(memory);
+			value += expr.execute(memory);
+		} else if (option == 2) {
+			expr.execute(memory);
+			value -= expr.execute(memory);
+		}
+		return value;
+	}
 }

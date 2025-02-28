@@ -28,4 +28,17 @@ class Term {
 			term.print();
 		}
 	}
+
+	public int execute(Memory memory) {
+		int value = factor.execute(memory);
+		if (option == 1) {
+			term.execute(memory);
+			value *= term.execute(memory);
+		} else if (option == 2) {
+			term.execute(memory);
+			value /= term.execute(memory);
+		}
+		return value;
+	}
+	
 }
