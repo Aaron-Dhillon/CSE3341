@@ -3,10 +3,18 @@ import java.util.*;
 class Memory {
     private Map<String, Variable> globalMemory;
     private Stack<Map<String, Variable>> localMemoryStack;
+    private Scanner dataScanner;
 
-    public Memory() {
+    public Memory(Scanner dataScanner) {
         globalMemory = new HashMap<>();
         localMemoryStack = new Stack<>();
+        this.dataScanner = dataScanner;
+    }
+
+    public int readInput() {
+        int value = dataScanner.getConst();
+        dataScanner.nextToken();
+        return value;
     }
 
     // Enter a new local scope

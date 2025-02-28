@@ -23,8 +23,8 @@ class Read implements Stmt {
 		System.out.println(");");
 	}
 
-	public void execute(Memory memory, Scanner inputScanner) {
-		int value = inputScanner.getConst();
+	public void execute(Memory memory) {
+		int value = memory.readInput();
 		memory.declareVariable(argument.identifier, true);
 		memory.setIntVariable(argument.identifier, value);
 	}
