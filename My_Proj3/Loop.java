@@ -56,13 +56,15 @@ class Loop implements Stmt {
 	}
 
 	public void execute(Memory memory) {
+		memory.declareVariable(id.identifier, true);
+		memory.setIntVariable(id.identifier, initial.execute(memory));
 		memory.enterScope();
-		memory.declareVariable(id.identifier,true);
-		memory.setIntVariable(id.identifier,initial.execute(memory));
-		while(cond.execute(memory)) {
-			ss.execute(memory);
-			memory.setIntVariable(id.identifier,update.execute(memory));
+		while (cond.execute(memory)) {
+			ss.execute(memory); // Execute loop body
+			int newValue = update.execute(memory);
+			memory.setIntVariable(id.identifier, newValue);
 		}
 		memory.exitScope();
 	}
+	
 }

@@ -72,17 +72,21 @@ class Memory {
     }
 
     // Helper: Retrieve a variable from the correct scope
-    public Variable getVariable(String varName) {
-        if (!localMemoryStack.isEmpty() && localMemoryStack.peek().containsKey(varName)) {
-            return localMemoryStack.peek().get(varName);
-        } else if (globalMemory.containsKey(varName)) {
-            return globalMemory.get(varName);
-        } else {
-            System.out.println("ERROR: Undeclared variable '" + varName + "'");
-            System.exit(1);
-            return null;  // Unreachable, but required by Java
+    private Variable getVariable(String varName) {
+        for (int i = localMemoryStack.size() - 1; i >= 0; i--) {
+            if (localMemoryStack.get(i).containsKey(varName)) {
+                return localMemoryStack.get(i).get(varName); // Return from correct local scope
+            }
         }
+        if (globalMemory.containsKey(varName)) {
+            return globalMemory.get(varName);
+        }
+        System.out.println("ERROR: Undeclared variable '" + varName + "'");
+        System.exit(1);
+        return null;
     }
+    
+
 
     // Helper: Get the current scope (local or global)
     private Map<String, Variable> getCurrentScope() {
