@@ -72,7 +72,7 @@ class Memory {
     }
 
     // Helper: Retrieve a variable from the correct scope
-    private Variable getVariable(String varName) {
+    public Variable getVariable(String varName) {
         if (!localMemoryStack.isEmpty() && localMemoryStack.peek().containsKey(varName)) {
             return localMemoryStack.peek().get(varName);
         } else if (globalMemory.containsKey(varName)) {

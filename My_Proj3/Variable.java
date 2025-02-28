@@ -31,7 +31,7 @@ class Variable {
     // Get integer value
     public int getIntValue() {
         if (!isInteger) {
-            objectValue.get(defaultKey);
+            objectValue.get(getDefaultKey());
         }
         return intValue;
     }
@@ -39,7 +39,7 @@ class Variable {
     // Set integer value
     public void setIntValue(int value) {
         if (!isInteger) {
-            objectValue.put(defaultKey, intValue);
+            objectValue.put(getDefaultKey(), intValue);
         }
         this.intValue = value;
     }
@@ -77,9 +77,7 @@ class Variable {
     public void aliasTo(Variable other) {
         this.objectValue = other.objectValue; // Now both variables reference the same object
     }
-
-    // Print the map
-    public void print() {
-        objectValue.forEach((key, value) -> System.out.println(key + " : " + value));
+    public String getDefaultKey() {
+        return defaultKey;
     }
 }
