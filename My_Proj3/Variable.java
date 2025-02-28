@@ -31,8 +31,7 @@ class Variable {
     // Get integer value
     public int getIntValue() {
         if (!isInteger) {
-            System.out.println("ERROR: Attempted to retrieve an integer from a non-integer variable.");
-            System.exit(1);
+            objectValue.get(defaultKey);
         }
         return intValue;
     }
@@ -40,8 +39,7 @@ class Variable {
     // Set integer value
     public void setIntValue(int value) {
         if (!isInteger) {
-            System.out.println("ERROR: Attempted to assign an integer to a non-integer variable.");
-            System.exit(1);
+            objectValue.put(defaultKey, intValue);
         }
         this.intValue = value;
     }
