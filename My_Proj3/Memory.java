@@ -85,6 +85,18 @@ class Memory {
         System.exit(1);
         return null;
     }
+    // Check if a variable exists in either local or global scope
+public boolean variableExists(String varName) {
+    // Check local scopes first (from most recent to oldest)
+    for (int i = localMemoryStack.size() - 1; i >= 0; i--) {
+        if (localMemoryStack.get(i).containsKey(varName)) {
+            return true; // Found in local scope
+        }
+    }
+    // Check global scope
+    return globalMemory.containsKey(varName);
+}
+
     
 
 

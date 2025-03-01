@@ -25,7 +25,9 @@ class Read implements Stmt {
 
 	public void execute(Memory memory) {
 		int value = memory.readInput();
-		memory.declareVariable(argument.identifier, true);
+		if(!memory.variableExists(argument.identifier)){
+			memory.declareVariable(argument.identifier, true);
+		}	
 		memory.setIntVariable(argument.identifier, value);
 	}
 }
