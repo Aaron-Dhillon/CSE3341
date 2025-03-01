@@ -20,7 +20,9 @@ class DeclInteger {
 	}
 
 	public void execute(Memory memory) {
+		// Declare the integer
 		memory.declareVariable(id.identifier,true);
+		// Set the integer value to 0 (default)
 		memory.setIntVariable(id.identifier,0);
 	}
 }

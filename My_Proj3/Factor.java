@@ -46,15 +46,19 @@ class Factor {
 	}
 
 	public int execute(Memory memory) {
+
+		// Check if it as an object reference or integer
 		if (id != null) {
+
+			// If key is not null, it is an object reference
 			if (key != null) {
 				return memory.getObjectKey(id.identifier, key);
 			} else {
 				return memory.getIntVariableValue(id.identifier);
 			}
-		} else if (expr != null) {
+		} else if (expr != null) { // If it is an expression
 			return expr.execute(memory);
-		} else {
+		} else { // otherwise it is a constant
 			return constant;
 		}
 	}

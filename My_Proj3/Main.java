@@ -14,6 +14,8 @@ class Main {
         // Parse the input program
         Procedure procedure = new Procedure();
         procedure.parse();
+
+        // Initialize the memory with the data file
         Scanner dataScanner = new Scanner(args[1]);
         Memory memory = new Memory(dataScanner);
         // Execute the parsed program

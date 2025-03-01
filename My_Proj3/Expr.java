@@ -30,7 +30,11 @@ class Expr {
 	}
 
 	public int execute(Memory memory) {
+
+		// Always begins with a term
 		int value = term.execute(memory);
+
+		// either + or - followed by another expression (optional)
 		if (option == 1) {
 			expr.execute(memory);
 			value += expr.execute(memory);

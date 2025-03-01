@@ -19,7 +19,11 @@ class DeclSeq {
 	}
 
 	public void execute(Memory memory) {
+
+		// has at least one declaration
 		decl.execute(memory);
+
+		// more declarations (optional)
 		if (ds != null) {
 			ds.execute(memory);
 		}

@@ -41,12 +41,23 @@ class If implements Stmt {
 		}
 		System.out.println("end");
 	}
+
+
 	public void execute(Memory memory) {
+
+		// Loop begins with checking the condition
 		if(cond.execute(memory)) {
+			// Has its own scope
 			memory.enterScope();
+			
+			// Execute the statements
 			ss1.execute(memory);
+
+			// Exit the scope
 			memory.exitScope();
-		} else if(ss2 != null) {
+
+		
+		} else if(ss2 != null) { // If there is an else statement
 			memory.enterScope();
 			ss2.execute(memory);
 			memory.exitScope();

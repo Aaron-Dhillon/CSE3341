@@ -24,10 +24,15 @@ class Read implements Stmt {
 	}
 
 	public void execute(Memory memory) {
+		// Read an integer value from input (.data files)
 		int value = memory.readInput();
+
+		// If doesn't exist, declare the variable
 		if(!memory.variableExists(argument.identifier)){
 			memory.declareVariable(argument.identifier, true);
-		}	
+		}
+
+		// Set the integer value
 		memory.setIntVariable(argument.identifier, value);
 	}
 }

@@ -30,7 +30,9 @@ class Term {
 	}
 
 	public int execute(Memory memory) {
+		// Always begins with a factor
 		int value = factor.execute(memory);
+		// either * or / followed by another term (optional)
 		if (option == 1) {
 			value *= term.execute(memory);
 		} else if (option == 2) {

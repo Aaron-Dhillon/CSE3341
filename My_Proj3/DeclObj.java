@@ -20,6 +20,7 @@ class DeclObj {
 	}
 
 	public void execute(Memory memory) {
+		// Declare the object
 		memory.declareVariable(id.identifier,false);
 	}
 }

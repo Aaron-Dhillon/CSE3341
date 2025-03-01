@@ -33,10 +33,13 @@ class Procedure {
 	}
 
 	public void execute(Memory memory) {
+
+		// Begins with declaring variables (optional)
 		if (ds != null) {
-			ds.execute(memory); // Execute declarations
+			ds.execute(memory);
 		}
-	
-		ss.execute(memory); // Execute statements
+
+		// Execute the statements
+		ss.execute(memory); 
 	}
 }

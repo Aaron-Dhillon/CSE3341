@@ -33,8 +33,12 @@ class StmtSeq {
 		}
 	}
 
+	
 	public void execute(Memory memory) {
+		// Execute the current statement
 		stmt.execute(memory);
+
+		// Can be followed by another statement sequence (optional)
 		if (ss != null) {
 			ss.execute(memory);
 		}

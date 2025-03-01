@@ -33,8 +33,11 @@ class Cmpr {
 	}
 
 	public boolean execute(Memory memory) {
+		// both sides of the comparison must be evaluated
 		int val1 = expr1.execute(memory);
 		int val2 = expr2.execute(memory);
+
+		// Perform the comparison
 		switch(option) {
 			case 0:
 				return val1 == val2;

@@ -8,6 +8,7 @@ class Id {
 	}
 	
 	void print() {
+		// Print the identifier
 		System.out.print(identifier);
 	}
 }

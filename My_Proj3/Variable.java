@@ -1,9 +1,16 @@
 import java.util.*;
 
 class Variable {
+    // Variables can be either integers or objects
+
+    // flag for integer or object
     private boolean isInteger;
+
+    // Integer value or object value
     private Integer intValue;
     Map<String, Integer> objectValue;
+
+    // Default key for object variables
     String defaultKey;
 
     // Constructor for integer variables (default value 0)
@@ -14,13 +21,8 @@ class Variable {
             this.objectValue = null;
         } else {
             this.intValue = null;
-            this.objectValue = null; // Will be initialized later
+            this.objectValue = null; // Will need to be initialized later
         }
-    }
-
-    // Check if this variable holds an integer
-    public boolean isInteger() {
-        return isInteger;
     }
 
     // Get integer value
@@ -47,10 +49,6 @@ class Variable {
     public void initializeAsObject(String key, int initialValue) {
         if (isInteger) {
             System.out.println("ERROR: Variable is not an object.");
-            System.exit(1);
-        }
-        if (this.objectValue != null) {
-            System.out.println("ERROR: Object already initialized.");
             System.exit(1);
         }
         this.objectValue = new HashMap<>();

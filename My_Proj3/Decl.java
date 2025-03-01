@@ -21,6 +21,7 @@ class Decl implements Stmt {
 	}
 
 	public void execute(Memory memory) {
+		// Either a int or object declaration
 		if (declInt != null) {
 			declInt.execute(memory);
 		} else {

@@ -1,8 +1,12 @@
 import java.util.*;
 
 class Memory {
+
+    // Global memory and local memory stack
     private Map<String, Variable> globalMemory;
     private Stack<Map<String, Variable>> localMemoryStack;
+
+    // Scanner for reading input data
     private Scanner dataScanner;
 
     public Memory(Scanner dataScanner) {
@@ -11,7 +15,9 @@ class Memory {
         this.dataScanner = dataScanner;
     }
 
+    // Read an integer value from input (.data files)
     public int readInput() {
+        // Check for end of input
         if(dataScanner.currentToken() == Core.EOS){
             System.out.println("ERROR: No more input to read.");
             System.exit(1);
@@ -51,11 +57,6 @@ class Memory {
         return getVariable(varName).getIntValue();
     }
 
-    // Create a new object with a default key-value pair
-    public void createObject(String varName, String key, int value) {
-        getVariable(varName).initializeAsObject(key, value);
-    }
-
     // Set an object key-value pair
     public void setObjectKey(String varName, String key, int value) {
         if(getVariable(varName).objectValue == null){
@@ -90,16 +91,16 @@ class Memory {
         return null;
     }
     // Check if a variable exists in either local or global scope
-public boolean variableExists(String varName) {
-    // Check local scopes first (from most recent to oldest)
-    for (int i = localMemoryStack.size() - 1; i >= 0; i--) {
-        if (localMemoryStack.get(i).containsKey(varName)) {
-            return true; // Found in local scope
+    public boolean variableExists(String varName) {
+        // Check local scopes first (from most recent to oldest)
+        for (int i = localMemoryStack.size() - 1; i >= 0; i--) {
+            if (localMemoryStack.get(i).containsKey(varName)) {
+                return true; // Found in local scope
+            }
         }
+        // Check global scope
+        return globalMemory.containsKey(varName);
     }
-    // Check global scope
-    return globalMemory.containsKey(varName);
-}
 
     
 

@@ -23,7 +23,9 @@ class Print implements Stmt {
 		System.out.println(");");
 	}
 	
+	
 	public void execute(Memory memory) {
+		// Print the value, value is an expression
 		System.out.println(expr.execute(memory));
 	}
 }
