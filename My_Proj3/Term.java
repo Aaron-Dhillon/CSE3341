@@ -32,10 +32,12 @@ class Term {
 	public int execute(Memory memory) {
 		int value = factor.execute(memory);
 		if (option == 1) {
-			term.execute(memory);
 			value *= term.execute(memory);
 		} else if (option == 2) {
-			term.execute(memory);
+			if(term.execute(memory) == 0){
+				System.out.println("ERROR: Division by zero.");
+				System.exit(1);
+			}
 			value /= term.execute(memory);
 		}
 		return value;

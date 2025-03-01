@@ -12,6 +12,10 @@ class Memory {
     }
 
     public int readInput() {
+        if(dataScanner.currentToken() == Core.EOS){
+            System.out.println("ERROR: No more input to read.");
+            System.exit(1);
+        }
         int value = dataScanner.getConst();
         dataScanner.nextToken();
         return value;

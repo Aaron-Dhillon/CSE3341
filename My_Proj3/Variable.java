@@ -34,6 +34,10 @@ class Variable {
     // Set integer value
     public void setIntValue(int value) {
         if (!isInteger) {
+            if(objectValue == null){
+                System.out.println("ERROR: Assignment to null object variable");
+                System.exit(1);
+            }
             objectValue.put(getDefaultKey(), value);
         }
         this.intValue = value;
