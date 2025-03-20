@@ -2,8 +2,12 @@ import java.util.*;
 
 class Function {
     String name;
-    ArrayList<String> parameters;
+    Parameters parameters;
     StmtSeq body;
+    
+    public Function() {
+        parameters = new Parameters();
+    }
     
     void parse() {
         Parser.expectedToken(Core.PROCEDURE);
@@ -18,23 +22,7 @@ class Function {
         Parser.expectedToken(Core.OBJECT);
         Parser.scanner.nextToken();
         
-        parameters = new ArrayList<>();
-        Parser.expectedToken(Core.ID);
-        parameters.add(Parser.scanner.getId());
-        Parser.scanner.nextToken();
-        
-        while (Parser.scanner.currentToken() == Core.COMMA) {
-            Parser.scanner.nextToken();
-            Parser.expectedToken(Core.ID);
-            String param = Parser.scanner.getId();
-            // Check for duplicate parameters
-            if (parameters.contains(param)) {
-                System.out.println("ERROR: Duplicate parameter name: " + param);
-                System.exit(0);
-            }
-            parameters.add(param);
-            Parser.scanner.nextToken();
-        }
+        parameters.parse();
         
         Parser.expectedToken(Core.RPAREN);
         Parser.scanner.nextToken();
@@ -60,9 +48,15 @@ class Function {
         Memory.pushScope();
         
         // Bind parameters to arguments
-        for (int i = 0; i < parameters.size(); i++) {
-            Memory.declareObject(parameters.get(i));
-            Memory.alias(parameters.get(i), args.get(i));
+        ArrayList<String> params = parameters.getParameters();
+        if (args.size() != params.size()) {
+            System.out.println("ERROR: Argument count mismatch for procedure " + name);
+            System.exit(0);
+        }
+        
+        for (int i = 0; i < params.size(); i++) {
+            Memory.declareObject(params.get(i));
+            Memory.alias(params.get(i), args.get(i));
         }
         
         // Execute procedure body
@@ -70,5 +64,19 @@ class Function {
         
         // Clean up scope
         Memory.popScope();
+    }
+    
+    void print(int indent) {
+        for (int i = 0; i < indent; i++) {
+            System.out.print("\t");
+        }
+        System.out.print("procedure " + name + "(object ");
+        parameters.print();
+        System.out.println(") is");
+        body.print(indent + 1);
+        for (int i = 0; i < indent; i++) {
+            System.out.print("\t");
+        }
+        System.out.println("end");
     }
 }

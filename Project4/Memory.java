@@ -17,6 +17,8 @@ class Memory {
 	
 	public static HashMap<String, Variable> global;
 	public static Stack<HashMap<String, Variable>> local;
+	// Store procedures for lookup during calls
+	private static HashMap<String, Function> procedures;
 	
 	// Helper methods to manage memory
 	
@@ -24,6 +26,26 @@ class Memory {
 	// Called before executing the DeclSeq
 	public static void initializeGlobal() {
 		global = new HashMap<String, Variable>();
+		procedures = new HashMap<String, Function>();
+	}
+	
+	// Register a procedure for later use
+	public static void registerFunction(Function func) {
+		if (procedures.containsKey(func.name)) {
+			System.out.println("ERROR: Duplicate procedure name: " + func.name);
+			System.exit(0);
+		}
+		procedures.put(func.name, func);
+	}
+	
+	// Get a procedure by name
+	public static Function getFunction(String name) {
+		Function func = procedures.get(name);
+		if (func == null) {
+			System.out.println("ERROR: Undefined procedure: " + name);
+			System.exit(0);
+		}
+		return func;
 	}
 	
 	// Initializes the local data structure
@@ -45,7 +67,7 @@ class Memory {
 	// Handles decl integer
 	public static void declareInteger(String id) {
 		Variable v = new Variable(Core.INTEGER);
-		if (local != null) {
+		if (local != null && !local.isEmpty()) {
 			local.peek().put(id, v);
 		} else {
 			global.put(id, v);
@@ -55,7 +77,7 @@ class Memory {
 	// Handles decl object
 	public static void declareObject(String id) {
 		Variable v = new Variable(Core.OBJECT);
-		if (local != null) {
+		if (local != null && !local.isEmpty()) {
 			local.peek().put(id, v);
 		} else {
 			global.put(id, v);
@@ -69,6 +91,11 @@ class Memory {
 		if (v.type == Core.INTEGER) {
 			value = v.integerVal;
 		} else {
+			if (v.mapVal == null) {
+				v.mapVal = new HashMap<>();
+				v.defaultKey = "default";
+				v.mapVal.put(v.defaultKey, 0);
+			}
 			value = v.mapVal.get(v.defaultKey);
 		}
 		return value;
@@ -77,6 +104,11 @@ class Memory {
 	// Retrieves a value for the key
 	public static int load(String id, String key) {
 		Variable v = getLocalOrGlobal(id);
+		if (v.mapVal == null) {
+			v.mapVal = new HashMap<>();
+			v.defaultKey = key;
+			v.mapVal.put(key, 0);
+		}
 		if (!v.mapVal.containsKey(key)) {
 			System.out.println("ERROR: key " + key + " is not valid!");
 			System.exit(0);
@@ -89,17 +121,22 @@ class Memory {
 		Variable v = getLocalOrGlobal(id);
 		if (v.type == Core.INTEGER) {
 			v.integerVal = value;
-		} else if (v.mapVal != null) {
-			v.mapVal.put(v.defaultKey, value);
 		} else {
-			System.out.println("ERROR: Assigning to null object " + id);
-			System.exit(0);
+			if (v.mapVal == null) {
+				v.mapVal = new HashMap<>();
+				v.defaultKey = "default";
+			}
+			v.mapVal.put(v.defaultKey, value);
 		}
 	}
 	
 	// Stores a value at key
 	public static void store(String id, String key, int value) {
 		Variable v = getLocalOrGlobal(id);
+		if (v.mapVal == null) {
+			v.mapVal = new HashMap<>();
+			v.defaultKey = key;
+		}
 		v.mapVal.put(key, value);
 	}
 	
@@ -121,19 +158,27 @@ class Memory {
 	
 	// Looks up value of the variables, searches local then global
 	private static Variable getLocalOrGlobal(String id) {
-		Variable result;
-		if (local.size() > 0) {
-			if (local.peek().containsKey(id)) {
-				result = local.peek().get(id);
-			} else {
-				HashMap<String, Variable> temp = local.pop();
-				result = getLocalOrGlobal(id);
-				local.push(temp);
+		Variable result = null;
+		if (local != null && !local.isEmpty()) {
+			Stack<HashMap<String, Variable>> tempStack = new Stack<>();
+			while (!local.isEmpty()) {
+				HashMap<String, Variable> currentScope = local.pop();
+				if (currentScope.containsKey(id)) {
+					result = currentScope.get(id);
+				}
+				tempStack.push(currentScope);
 			}
-		} else {
+			while (!tempStack.isEmpty()) {
+				local.push(tempStack.pop());
+			}
+		}
+		if (result == null) {
 			result = global.get(id);
+		}
+		if (result == null) {
+			System.out.println("ERROR: Variable not found: " + id);
+			System.exit(0);
 		}
 		return result;
 	}
-
 }
