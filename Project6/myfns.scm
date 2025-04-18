@@ -3,19 +3,19 @@
 (define (plan program)
   (evalExpr (cadr program) '()))  ; Evaluate the expression part with an empty environment
 
-; Evaluates a PLAN expression with the current environment
+; Evaluates a PLAN expression with the current env
 ; - expr: The expression to evaluate
 ; - env: The current environment (list of bindings)
 ; Returns the integer value of the expression
 (define (evalExpr expr env)
   (cond
-    ; If expression is an integer constant, return it directly
+    ; If expr is an integer constant, return it directly
     ((integer? expr) expr)
     
-    ; If expression is a symbol (identifier), look up its value in the environment
+    ; If expr is a symbol (identifier), look up its value in the env
     ((symbol? expr) (lookup expr env))
     
-    ; If expression is a list (compound expression), determine its type and evaluate accordingly
+    ; If expr is a list, determine its type and evaluate 
     ((list? expr)
      (cond
        ; planIf: Conditional expression (planIf <condition> <then-expr> <else-expr>)
@@ -33,7 +33,7 @@
        ; planLet: Variable binding expression (planLet <id> <val-expr> <body-expr>)
        ((equal? (car expr) 'planLet) (evalPlanLet expr env))
        
-       ; Function call: (<function-id> <arg-expr>)
+       ; Function call: (<id> <expr>)
        (else (evalFunctionCall expr env))))))
 
 ; Evaluates a planIf expression: (planIf <condition> <then-expr> <else-expr>)
@@ -75,9 +75,9 @@
         ; Evaluate val-expr and bind the result to id
         (evalExpr (cadddr expr) (cons (cons id (evalExpr val-expr env)) env)))))
 
-; Evaluates a function call expression: (<function-id> <arg-expr>)
+; Evaluates a function call expression: (<id> <expr>)
 ; Looks up the function, evaluates the argument, and evaluates the function body
-; with the parameter bound to the argument value
+; with the parameter
 (define (evalFunctionCall expr env)
   (let ((func-id (car expr))        ; Get the function identifier
         (arg-expr (cadr expr)))     ; Get the argument expression
@@ -89,9 +89,9 @@
         (evalExpr body-expr (cons (cons param-id arg-val) env))))))
 
 ; Looks up an identifier in the environment
-; Uses dynamic scoping (most recent binding)
+; Uses dynamic scoping
 ; - id: The identifier to look up
-; - env: The environment (list of bindings)
+; - env: The environment
 ; Returns the value bound to the identifier
 (define (lookup id env)
   (cond
