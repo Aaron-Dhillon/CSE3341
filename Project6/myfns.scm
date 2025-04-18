@@ -29,8 +29,8 @@
        ; planLet expression
        ((equal? (car expr) 'planLet) (evalPlanLet expr env))
        
-       ; Default case (should not happen with valid input)
-       (else 0)))))
+       ; Function call expression (id expr)
+       (else (evalFunctionCall expr env))))))
 
 ; Evaluates a planIf expression
 (define (evalPlanIf expr env)
@@ -56,8 +56,26 @@
 ; Evaluates a planLet expression
 (define (evalPlanLet expr env)
   (let ((id (cadr expr))
-        (val (evalExpr (caddr expr) env)))
-    (evalExpr (cadddr expr) (cons (cons id val) env))))
+        (val-expr (caddr expr)))
+    ; Check if val-expr is a planFunction
+    (if (and (list? val-expr) (equal? (car val-expr) 'planFunction))
+        ; Handle function definition
+        (evalExpr (cadddr expr) (cons (cons id val-expr) env))
+        ; Handle regular variable binding
+        (evalExpr (cadddr expr) (cons (cons id (evalExpr val-expr env)) env)))))
+
+; Evaluates a function call expression
+(define (evalFunctionCall expr env)
+  (let ((func-id (car expr))
+        (arg-expr (cadr expr)))
+    (let ((func-def (lookup func-id env)))
+      (if (and (list? func-def) (equal? (car func-def) 'planFunction))
+          (let ((param-id (cadr func-def))
+                (body-expr (caddr func-def))
+                (arg-val (evalExpr arg-expr env)))
+            ; Create a new environment with the parameter binding
+            (evalExpr body-expr (cons (cons param-id arg-val) env)))
+          0)))) ; Should not happen with valid input
 
 ; Looks up an identifier in the environment
 ; Uses dynamic scoping (most recent binding)
